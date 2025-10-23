@@ -1,0 +1,32 @@
+--information:Delphiモジュール確認
+--label:モジュール確認
+--track@value1:数値1,0,1000,1,1
+--track@value2:数値2,0,1000,2,1
+--color@color:色,0xffffff
+
+
+-- モジュールをロード（SampleScriptModule.mod2 を想定）
+local func = obj.module("SampleScriptModule")
+
+
+-- 結果を文字列化して表示
+if func == nil then
+    obj.load("text", "モジュールのロードに失敗しました。")
+else
+    local msg = "モジュールがロードされました。\n"
+    msg = msg .. "利用可能な関数:\n"
+
+    -- AviUtl側では func 自体はLuaテーブル扱いなので一覧表示はできないが、
+    -- 既知の関数を試しに呼び出して結果を確認
+    if func.sum ~= nil then
+        msg = msg .. "・sum()\n"
+    end
+    if func.luminance ~= nil then
+        msg = msg .. "・luminance()\n"
+    end
+
+    local result = func.sum(value1, value2)
+    msg = msg .. string.format("計算結果: %.2f + %.2f = %.2f", value1, value2, result)
+
+    obj.load("text", msg)
+end
